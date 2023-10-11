@@ -14,6 +14,7 @@ class FilesContainers:
         return self.image
 
     def show_image(self):
+        """ Cette fonction permet d'afficher l'image instancié """
         return self.image.show()
 
     def convert_img(self, format_):  # format de conversion sous forme str
