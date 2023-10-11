@@ -1,6 +1,6 @@
 from PIL import Image
 from pathlib import Path
-
+import os
 
 class FilesContainers:
 
@@ -15,5 +15,6 @@ class FilesContainers:
         return self.image.show()
 
     def convert_img(self, format_):  # format de conversion sous forme str
-        self.image.save(self.paths, format_)
-        return self.image
+        
+        new_path = image.split('.')[0]
+        self.image.save(new_path + f'.{format_.lower()}', format_)
