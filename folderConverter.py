@@ -7,13 +7,17 @@ from pathlib import Path
 class folderContainer:
     def __init__(self, folder):
         self.folder = folder
-        self.extensions = ('.jpg', '.jpeg', '.png', '.ico', ".gif", ".webp")
+        self.extensions = ('.jpg', '.jpeg', '.png', '.ico', ".gif", ".webp", ".tiff")
         self.images = [f for f in listdir(self.folder) if
                        f.lower().endswith(self.extensions) and isfile(join(self.folder, f))]
 
         assert len(listdir(self.folder)) != 0, "Le dossier est vide, aucune image ne peut être convertie"
 
-    def to_format(self, format, start=0, end=None):
+    def get_indexes(self):
+        indexes = [i for i in range(len(self.images) + 1)]
+        return indexes
+
+    def to_format(self, destination_format, start=0, end=None):
         """
         Cette fonction convertit une liste d'image en dans le format spécifié
 
@@ -34,7 +38,7 @@ class folderContainer:
             image.convert('RGB')
             new_path = join(self.folder, image_name)
             print(new_path)
-            image.save(new_path + f'.{format.lower()}', format)
+            image.save(new_path + f'.{destination_format.lower()}', destination_format)
 
         print("Les nouvelles images sont dans le dossier.")
 
@@ -55,3 +59,4 @@ class folderContainer:
         for image in self.images[start:end]:
             image = Image.open(join(self.folder, image))
             image.show()
+
