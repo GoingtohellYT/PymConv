@@ -19,12 +19,12 @@ class FilesContainers:
 
     def convert_img(self, format_):  # format de conversion sous forme str
         """
-        Cette fonction permet de convertir l'image séléctionné sous d'autre format
+        Cette fonction permet de convertir l'image sélectionnée sous un autre format
 
-        Prend en paramètre le format dans lequel il faut convertir l'image sous forme string
+        Prend en paramètre le format dans lequel il faut convertir l'image sous forme de string
 
         Renvoie : rien
         """
-        assert len(format_) != 0, "aucun format rentrer"
+        assert len(format_) != 0, "aucun format rentré"
         new_path = os.path.splitext(self.paths)[0]
         self.image.save(new_path + f'.{format_.lower()}', format_)

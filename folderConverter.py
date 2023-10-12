@@ -1,10 +1,9 @@
 from PIL import Image
 from os import listdir
 from os.path import isfile, join
-from pathlib import Path
 
 
-class folderContainer:
+class FolderContainer:
     def __init__(self, folder):
         self.folder = folder
         self.extensions = ('.jpg', '.jpeg', '.png', '.ico', ".gif", ".webp", ".tiff")
@@ -14,6 +13,16 @@ class folderContainer:
         assert len(listdir(self.folder)) != 0, "Le dossier est vide, aucune image ne peut être convertie"
 
     def get_indexes(self):
+        """
+        Cette fonction renvoie les index des images du dossier plus 1
+
+        Retourne :
+            Une liste d'integers allant de 0 à la taille de la liste
+        Pré-conditions :
+            Aucune
+        Post-condition :
+            L'élément retourné est une liste d'entiers allant de 0 au nombre d'images supportées dans le dossier
+        """
         indexes = [i for i in range(len(self.images) + 1)]
         return indexes
 
@@ -34,10 +43,8 @@ class folderContainer:
         for image in self.images[start:end]:
             image_name = image.split('.')[0]
             image = Image.open(join(self.folder, image))
-            print(image.format)
-            image.convert('RGB')
+            image = image.convert('RGB')
             new_path = join(self.folder, image_name)
-            print(new_path)
             image.save(new_path + f'.{destination_format.lower()}', destination_format)
 
         print("Les nouvelles images sont dans le dossier.")
@@ -59,4 +66,3 @@ class folderContainer:
         for image in self.images[start:end]:
             image = Image.open(join(self.folder, image))
             image.show()
-
