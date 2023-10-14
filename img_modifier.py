@@ -8,7 +8,6 @@ class img_modifier:
     def __init__(self, paths):
         self.paths = paths  # on modifie le chemin d'accès pour qu'il soit relatif
         self.image = Image.open(self.paths).convert("RGB")  # image ouverte sur laquelle on va travailler
-        self.image_modifier = Image.open(self.paths).convert("RGB")  # image ouverte sur laquelle on va travailler
 
     def get_image(self):
         return self.image
@@ -16,25 +15,37 @@ class img_modifier:
     def show_image(self):
         return self.image.show()
 
+    def preview_rotate_img(self, degre):
+        """methode qui fait montre l'image pivoter l'image.
+        Prend en paramètre le nombre de degré sur lequel il faut pivoter"""
+        self.image.rotate(degre).show()
+
     def rotate_img(self, degre):
-        """methode qui fait pivoter l'image"""
-        self.image_modifier = self.image_modifier.rotate(degre).show()
-        return self.image_modifier
+        """methode qui fait pivoter l'image et la sauvegarde.
+        Prend en paramètre le nombre de degré sur lequel il faut pivote"""
+        self.image.rotate(degre).save()
+
+
+    def preview_filter_img(self, filter):
+        """methode qui montre le filte sur l'image que l'utilisateur veut mettre.
+        Prend en paramètre le nom du filtre"""
+        self.image.filter(filter).show()
 
     def filter_img(self, filter):
-        self.image_modifier = self.image_modifier.filter(filter).show()
-        return self.image_modifier
+        """methode qui sauvegarde le filte sur l'image que l'utilisateur veut mettre.
+        Prend en paramètre le nom du filtre"""
+        self.image.filter(filter).save()
+
+    def preview_resize_img(self, size):
+        """Focntion qui montre la modification de taille.
+        parametre : size est un tuple avec largeur, hauteur"""
+        self.image.resize(size).show()
 
     def resize_img(self, size):
-        """parametre : size est un tuple avec largeur, hauteur"""
-        self.image_modifier = self.image_modifier.resize(size).show()
-        return self.image_modifier
+        """Fonctiojn qui sauvegarde la modification de taille
+        parametre : size est un tuple avec largeur, hauteur"""
+        self.image.resize(size).save()
 
     def save_img(self):  # format de conversion sous forme str
         new_path = os.path.splitext(self.paths)[0]
         self.image.save(new_path, "jpeg")
-
-
-img1 = img_modifier(Path(r"C:\Users\Mat\Desktop\projet_bis\image_modifier\V5.gif"))
-img1.resize_img((1280,720))
-img1.rotate_img(45)
