@@ -23,7 +23,7 @@ class img_modifier:
     def rotate_img(self, degre):
         """methode qui fait pivoter l'image et la sauvegarde.
         Prend en paramètre le nombre de degré sur lequel il faut pivote"""
-        self.image.rotate(degre).save()
+        self.image.rotate(degre).save(self.paths)
 
 
     def preview_filter_img(self, filter):
@@ -34,7 +34,7 @@ class img_modifier:
     def filter_img(self, filter):
         """methode qui sauvegarde le filte sur l'image que l'utilisateur veut mettre.
         Prend en paramètre le nom du filtre"""
-        self.image.filter(filter).save()
+        self.image.filter(filter).save(self.paths)
 
     def preview_resize_img(self, size):
         """Focntion qui montre la modification de taille.
@@ -44,8 +44,9 @@ class img_modifier:
     def resize_img(self, size):
         """Fonctiojn qui sauvegarde la modification de taille
         parametre : size est un tuple avec largeur, hauteur"""
-        self.image.resize(size).save()
+        self.image.resize(size).save(self.paths)
 
     def save_img(self):  # format de conversion sous forme str
         new_path = os.path.splitext(self.paths)[0]
         self.image.save(new_path, "jpeg")
+
