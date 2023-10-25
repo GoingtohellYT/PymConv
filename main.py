@@ -10,7 +10,7 @@ class UI:
     def __init__(self):
         self.instance = None
 
-        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF"]
+        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF", "PDF"]  # Types dans lesquels on peut convertir les fichiers
 
         self.window = tkinter.Tk()  # On crée une fenêtre graphique avec tkinter
         self.window.title("PymConv")
@@ -62,6 +62,8 @@ class UI:
         self.fo_container_convert = tkinter.Button(self.right_frame, text="Convertir les images du dossier",
                                                    font=("Arial", 12), bg='white', command=self.convert_folder_images)
         self.fo_container_convert.pack(pady=20)
+
+        # -------------- Partie Générale ----------------- #
         # On affiche les frames
         self.left_frame.pack(side=tkinter.LEFT, padx=20, pady=20)
         self.right_frame.pack(side=tkinter.RIGHT, padx=20, pady=20)
