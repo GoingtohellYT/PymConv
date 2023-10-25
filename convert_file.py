@@ -1,4 +1,5 @@
 from PIL import Image
+from pillow_heif import HeifImagePlugin
 import os
 
 
