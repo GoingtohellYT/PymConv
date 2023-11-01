@@ -55,7 +55,7 @@ class FilesContainers(ImgModifier):
 
     def try_resize(self, size):
         """
-         Cette fonction affiche l'image recadrée sans appliquer la modification en faisant appel à la superclasse ImgModifier
+        Cette fonction affiche l'image recadrée sans appliquer la modification en faisant appel à la superclasse ImgModifier
 
         Argument :
             size est un tuple d'entiers

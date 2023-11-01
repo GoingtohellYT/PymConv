@@ -1,7 +1,5 @@
-from PIL import Image
 from pillow_heif import HeifImagePlugin
-from os import listdir
-from os.path import isfile, join
+from os.path import join
 from folderModifier import ImagesModifier
 
 
@@ -165,7 +163,7 @@ class FolderContainer(ImagesModifier):
                 else:
                     pass
                 new_path = join(self.folder, image_name + '_modified')
-                image.save(new_path + f'.{destination_format.lower()}', destination_format, bitmap_format="bmp")
+                image.save(new_path + f'.{destination_format.lower()}', destination_format)
 
     def see_images(self, start=0, end=None):
         """

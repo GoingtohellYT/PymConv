@@ -11,124 +11,114 @@ class UI:
     def __init__(self):
         self.instance = None
 
+        # --------------- Partie Définition des constantes ----------------- #
+
         self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF", "PDF"]  # Types dans lesquels on peut convertir les fichiers
         self.degres = ["0.0", "45.0", "90.0", "135.0", "180.0", "225.0", "270.0", "315.0"]  # Angles de rotation par défaut
         self.filtres = ["NONE", "BLUR", "CONTOUR", "DETAIL", "EDGE_ENHANCE", "EDGE_ENHANCE_MORE", "EMBOSS", "FIND_EDGES", "SHARPEN", "SMOOTH", "SMOOTH_MORE"]  # Filtres disponibles
 
+        self.background_color = "#B2BABB"
+        self.font = ("Arial", 12)
+        self.minimal_y_separation = 4
+        self.large_y_separation = 15
+        self.usual_x_separation = 20
+        self.minimal_x_separation = 10
+        self.massive_x_separation = 70
+
+        # --------------- Partie Mise en place de l'UI ----------------- #
+
         self.window = tkinter.Tk()  # On crée une fenêtre graphique avec tkinter
         self.window.title("PymConv")
-        self.window.geometry("1080x720")
+        self.window.geometry("1080x500")
         self.window.config(background="#B2BABB")
 
-        # On définit deux "boîtes" qui vont contenir les éléments du GUI
-        self.right_frame = tkinter.Frame(self.window, background="#B2BABB")
-        self.left_frame = tkinter.Frame(self.window, background="#B2BABB")
+        # On définit des "boîtes" qui vont contenir les éléments du GUI
+        self.right_frame = tkinter.Frame(self.window, background=self.background_color)
+        self.left_frame = tkinter.Frame(self.window, background=self.background_color)
+        self.top_frame = tkinter.Frame(self.window, background=self.background_color)
+        self.bottom_frame = tkinter.Frame(self.window, background=self.background_color)
 
-        self.folder_button = tkinter.Button(self.window, text="Ouvrir un dossier", font=("Arial", 12), bg='white',
-                                            command=self.open_folder)
-        self.folder_button.pack(pady=10)
-
-        self.file_button = tkinter.Button(self.window, text="Ouvrir un fichier", font=("Arial", 12), bg='white',
+        self.file_button = tkinter.Button(self.top_frame, text="Ouvrir un fichier", font=self.font, bg='white',
                                           command=self.open_file)
-        self.file_button.pack(pady=5)
+        self.file_button.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
 
-        # --------------- Partie Fichiers --------------- #
+        self.folder_button = tkinter.Button(self.top_frame, text="Ouvrir un dossier", font=self.font, bg='white',
+                                            command=self.open_folder)
+        self.folder_button.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
 
-        self.fi_rotations = ttk.Combobox(self.left_frame, values=self.degres)
-        self.fi_rotations.current(0)
-        self.fi_rotations.pack()
+        self.start_label = tkinter.Label(self.top_frame, text="Agir sur les images : ", font=self.font, fg='black',  bg=self.background_color)
+        self.start_label.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.fi_rotate_try = tkinter.Button(self.left_frame, text="Essayer", font=("Arial", 12), bg='white', command=self.try_file_rotation)
-        self.fi_rotate_try.pack(pady=2)
+        self.fo_start_indexes = ttk.Combobox(self.top_frame, state='readonly')
+        self.fo_start_indexes.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.fi_rotate_confirm = tkinter.Button(self.left_frame, text="Valider", font=("Arial", 12), bg="white", command=self.confirm_file_rotation)
-        self.fi_rotate_confirm.pack(pady=2)
+        self.separator_label = tkinter.Label(self.top_frame, text="à", font=self.font, fg="black", bg=self.background_color)
+        self.separator_label.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.fi_filter_choice = ttk.Combobox(self.left_frame, values=self.filtres, state="readonly")
-        self.fi_filter_choice.pack(pady=5)
+        self.fo_end_indexes = ttk.Combobox(self.top_frame, state='readonly')
+        self.fo_end_indexes.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.fi_filter_try = tkinter.Button(self.left_frame, text="Essayer", font=("Arial", 12), bg="white", command=self.try_file_filter)
-        self.fi_filter_try.pack(pady=2)
-
-        self.fi_filter_confirm = tkinter.Button(self.left_frame, text="Valider", font=("Arial", 12), bg="white", command=self.confirm_file_filter)
-        self.fi_filter_confirm.pack(pady=2)
-
-        self.fi_size_entry = tkinter.Entry(self.left_frame, font=("Arial", 12), bg='white')
-        self.fi_size_entry.insert(0, "Largeur*Hauteur")
-        self.fi_size_entry.pack(pady=5)
-
-        self.fi_size_try = tkinter.Button(self.left_frame, text="Essayer", font=("Arial", 12), bg="white", command=self.try_file_crop)
-        self.fi_size_try.pack(pady=2)
-
-        self.fi_size_confirm = tkinter.Button(self.left_frame, text="Valider", font=("Arial", 12), bg='white', command=self.confirm_file_crop)
-        self.fi_size_confirm.pack(pady=2)
-
-        self.show_image = tkinter.Button(self.left_frame, text="Voir l'image", font=("Arial", 12), bg='white',
-                                         command=self.see_images)
-        self.show_image.pack(pady=20)
-
-        self.fi_container_choice = ttk.Combobox(self.left_frame, values=self.types_supportes, state='readonly')
-        self.fi_container_choice.current(0)
-        self.fi_container_choice.pack()
-
-        self.convert_file = tkinter.Button(self.left_frame, text="Convertir l'image", font=("Arial", 12), bg='white', command=self.convert_images)
-        self.convert_file.pack(pady=20)
-
-        # --------------- Partie Dossiers ----------------- #
-
-        self.fo_start_indexes = ttk.Combobox(self.right_frame, state='readonly')
-        self.fo_start_indexes.pack(pady=20)
-
-        self.fo_end_indexes = ttk.Combobox(self.right_frame, state='readonly')
-        self.fo_end_indexes.pack()
-
-        self.fo_rotation_choice = ttk.Combobox(self.right_frame, values=self.degres)
-        self.fo_rotation_choice.current(0)
-        self.fo_rotation_choice.pack(pady=5)
-
-        self.fo_rotation_test = tkinter.Button(self.right_frame, text="Essayer", font=("Arial", 12), bg='white', command=self.try_file_rotation)
-        self.fo_rotation_test.pack(pady=2)
-
-        self.fo_rotation_confirm = tkinter.Button(self.right_frame, text="Valider", font=('Arial', 12), bg='white', command=self.confirm_file_rotation)
-        self.fo_rotation_confirm.pack(pady=2)
-
-        self.fo_filter_choice = ttk.Combobox(self.right_frame, values=self.filtres, state='readonly')
-        self.fo_filter_choice.pack(pady=5)
-
-        self.fo_filter_try = tkinter.Button(self.right_frame, text="Essayer", font=("Arial", 12), bg='white', command=self.try_file_filter)
-        self.fo_filter_try.pack(pady=2)
-
-        self.fo_filter_confirm = tkinter.Button(self.right_frame, text="Valider", font=("Arial", 12), bg="white", command=self.confirm_file_filter)
-        self.fo_filter_confirm.pack(pady=2)
-
-        self.fo_size_entry = tkinter.Entry(self.right_frame, font=("Arial", 12), bg='white')
-        self.fo_size_entry.insert(0, "Largeur*Hauteur")
-        self.fo_size_entry.pack(pady=5)
-
-        self.fo_size_try = tkinter.Button(self.right_frame, text="Essayer", font=("Arial", 12), bg='white', command=self.try_file_crop)
-        self.fo_size_try.pack(pady=2)
-
-        self.fo_size_confirm = tkinter.Button(self.right_frame, text="Valider", font=("Arial", 12), bg='white', command=self.confirm_file_crop)
-        self.fo_size_confirm.pack(pady=2)
-
-        self.see_images_btn = tkinter.Button(self.right_frame, text="Voir les images du dossier", font=("Arial", 12),
-                                             bg='white',
+        self.see_images_btn = tkinter.Button(self.bottom_frame, text="Voir la ou les images", font=self.font, bg='white',
                                              command=self.see_images)
-        self.see_images_btn.pack(pady=20)
+        self.see_images_btn.pack(side=tkinter.LEFT)
 
-        self.fo_container_choice = ttk.Combobox(self.right_frame, values=self.types_supportes,
-                                                state='readonly')  # On crée une combobox avec les conteneurs disponibles
-        self.fo_container_choice.current(0)  # On définit l'élément par défaut sur le premier élément de la liste
-        self.fo_container_choice.pack()
+        # --------------- Partie Modifications ----------------- #
 
-        self.fo_container_convert = tkinter.Button(self.right_frame, text="Convertir les images du dossier",
-                                                   font=("Arial", 12), bg='white', command=self.convert_images)
-        self.fo_container_convert.pack(pady=20)
+        self.resize_label = tkinter.Label(self.left_frame, font=self.font, bg=self.background_color, fg='black', text="Changer les dimensions")
+        self.resize_label.pack(padx=self.massive_x_separation)
 
-        # -------------- Partie Générale ----------------- #
+        self.size_entry = tkinter.Entry(self.left_frame, font=self.font, bg='white')
+        self.size_entry.insert(0, "Largeur*Hauteur")
+        self.size_entry.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.size_try = tkinter.Button(self.left_frame, text="Essayer", font=self.font, bg='white',
+                                       command=self.try_crop)
+        self.size_try.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.size_confirm = tkinter.Button(self.left_frame, text="Valider", font=self.font, bg='white',
+                                           command=self.confirm_crop)
+        self.size_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.rotation_label = tkinter.Label(self.left_frame, text="Tourner l'image", font=self.font, fg="black", bg=self.background_color)
+        self.rotation_label.pack(padx=self.massive_x_separation, pady=self.large_y_separation)
+
+        self.rotation_choice = ttk.Combobox(self.left_frame, values=self.degres)
+        self.rotation_choice.current(0)
+        self.rotation_choice.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.rotation_test = tkinter.Button(self.left_frame, text="Essayer", font=self.font, bg='white', command=self.try_rotation)
+        self.rotation_test.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.rotation_confirm = tkinter.Button(self.left_frame, text="Valider", font=self.font, bg='white', command=self.confirm_rotation)
+        self.rotation_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.filter_label = tkinter.Label(self.right_frame, text="Appliquer un filtre", font=self.font, bg=self.background_color, fg="black")
+        self.filter_label.pack(padx=self.massive_x_separation)
+
+        self.filter_choice = ttk.Combobox(self.right_frame, values=self.filtres, state='readonly')
+        self.filter_choice.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.filter_try = tkinter.Button(self.right_frame, text="Essayer", font=self.font, bg='white', command=self.try_filter)
+        self.filter_try.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.filter_confirm = tkinter.Button(self.right_frame, text="Valider", font=self.font, bg="white", command=self.confirm_filter)
+        self.filter_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+
+        self.container_choice = ttk.Combobox(self.right_frame, values=self.types_supportes,
+                                             state='readonly')  # On crée une combobox avec les conteneurs disponibles
+        self.container_choice.current(0)  # On définit l'élément par défaut sur le premier élément de la liste
+        self.container_choice.pack(pady=self.large_y_separation, padx=self.massive_x_separation)
+
+        self.container_convert = tkinter.Button(self.bottom_frame, text="Convertir les images du dossier",
+                                                font=self.font, bg='white', command=self.convert_images)
+        self.container_convert.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
+
+        # -------------- Partie Affichage des ensembles ----------------- #
         # On affiche les frames
-        self.left_frame.pack(side=tkinter.LEFT, padx=20, pady=20)
-        self.right_frame.pack(side=tkinter.RIGHT, padx=20, pady=20)
+        self.top_frame.pack(side=tkinter.TOP, pady=20)
+        self.left_frame.pack(side=tkinter.LEFT)
+        self.right_frame.pack(side=tkinter.RIGHT)
+        self.bottom_frame.pack(side=tkinter.BOTTOM, pady=15)
         # On actualise la fenêtre
         self.window.mainloop()
 
@@ -171,7 +161,14 @@ class UI:
 
     def see_images(self):
         """
-        Fonction qui permet d'afficher les images voulues
+        Fonction qui permet d'afficher la ou les images voulues en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            L'image/Les images sont affichées
         """
         if type(self.instance) == FolderContainer:
             start = int(self.fo_start_indexes.get())
@@ -182,49 +179,77 @@ class UI:
 
     def convert_images(self):
         """
-        Fonction permet de convertir les images voulues dans le format voulu
+        Fonction permet de convertir l'image/les images voulues dans le format voulu en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            L'image/Les images sont enregistrées sur la machine
         """
         if type(self.instance) == FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
-            dest_format = str(self.fo_container_choice.get())
+            dest_format = str(self.container_choice.get())
             self.instance.to_format(dest_format, start, end)
         elif type(self.instance) == FilesContainers:
-            dest_format = str(self.fi_container_choice.get())
+            dest_format = str(self.container_choice.get())
             self.instance.convert_img(dest_format)
 
-    def try_file_rotation(self):
+    def try_rotation(self):
         """
-        Fonction qui appelle FilesContainers.preview_rotate_img(degre) pour afficher un aperçu de l'image avec la rotation appliquée
+        Fonction qui affiche un aperçu de l'image/les images avec la rotation appliquée en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            L'image/Les images tournées sont affichées
         """
         if type(self.instance) == FilesContainers:
-            angle = float(self.fi_rotations.get())
+            angle = float(self.rotation_choice.get())
             self.instance.try_rotate_img(angle)
         elif type(self.instance) == FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
-            angle = float(self.fo_rotation_choice.get())
+            angle = float(self.rotation_choice.get())
             self.instance.try_rotations(angle, start, end)
 
-    def confirm_file_rotation(self):
+    def confirm_rotation(self):
         """
-        Fonction qui applique la rotation sur l'image
+        Fonction qui applique la rotation sur l'image/les images en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            La rotation est appliquée
         """
         if type(self.instance) == FilesContainers:
-            angle = float(self.fi_rotations.get())
+            angle = float(self.rotation_choice.get())
             self.instance.confirm_rotation(angle)
         elif type(self.instance) == FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
-            angle = float(self.fo_rotation_choice.get())
+            angle = float(self.rotation_choice.get())
             self.instance.apply_rotations(angle, start, end)
 
-    def try_file_filter(self):
+    def try_filter(self):
         """
-        Fonction qui affiche un aperçu de l'image avec le filtre appliqué
+        Fonction qui affiche un aperçu de l'image/les images avec le filtre appliqué en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            L'image/Les images sont affichées avec le filtre
         """
         if type(self.instance) == FilesContainers:
-            filtre = str(self.fi_filter_choice.get())
+            filtre = str(self.filter_choice.get())
             if filtre == "BLUR":
                 self.instance.try_filter(ImageFilter.BLUR)
             elif filtre == "CONTOUR":
@@ -246,7 +271,7 @@ class UI:
             elif filtre == "SMOOTH_MORE":
                 self.instance.try_filter(ImageFilter.SMOOTH_MORE)
         elif type(self.instance) == FolderContainer:
-            filtre = str(self.fo_filter_choice.get())
+            filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             if filtre == "BLUR":
@@ -270,12 +295,19 @@ class UI:
             elif filtre == "SMOOTH_MORE":
                 self.instance.try_filter(ImageFilter.SMOOTH_MORE, start, end)
 
-    def confirm_file_filter(self):
+    def confirm_filter(self):
         """
-        Fonction qui applique le filtre sur l'image
+        Fonction qui applique le filtre sur l'image/les images en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            Le filtre est appliqué
         """
         if type(self.instance) == FilesContainers:
-            filtre = str(self.fi_filter_choice.get())
+            filtre = str(self.filter_choice.get())
             if filtre == "BLUR":
                 self.instance.confirm_filter(ImageFilter.BLUR)
             elif filtre == "CONTOUR":
@@ -297,7 +329,7 @@ class UI:
             elif filtre == "SMOOTH_MORE":
                 self.instance.confirm_filter(ImageFilter.SMOOTH_MORE)
         elif type(self.instance) == FolderContainer:
-            filtre = str(self.fo_filter_choice.get())
+            filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             if filtre == "BLUR":
@@ -321,42 +353,56 @@ class UI:
             elif filtre == "SMOOTH_MORE":
                 self.instance.apply_filter(ImageFilter.SMOOTH_MORE, start, end)
 
-    def try_file_crop(self):
+    def try_crop(self):
         """
-        Fonction qui affiche la version redimensionnée de l'image
+        Fonction qui affiche la version redimensionnée de l'image/les images en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            L'image/Les images sont affichées aux nouvelles dimensions
         """
         if type(self.instance) == FilesContainers:
             try:
-                width = int(self.fi_size_entry.get().split("*")[0])
-                height = int(self.fi_size_entry.get().split("*")[1])
+                width = int(self.size_entry.get().split("*")[0])
+                height = int(self.size_entry.get().split("*")[1])
                 self.instance.try_resize((width, height))
             except ValueError:
                 return
         elif type(self.instance) == FolderContainer:
             try:
-                width = int(self.fo_size_entry.get().split("*")[0])
-                height = int(self.fo_size_entry.get().split("*")[1])
+                width = int(self.size_entry.get().split("*")[0])
+                height = int(self.size_entry.get().split("*")[1])
                 start = int(self.fo_start_indexes.get())
                 end = int(self.fo_end_indexes.get())
                 self.instance.try_resize((width, height), start, end)
             except ValueError:
                 return
 
-    def confirm_file_crop(self):
+    def confirm_crop(self):
         """
-        Fonction qui applique le recadrage de l'image
+        Fonction qui applique le recadrage de l'image/les images en faisant appel à la méthode de l'instance
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Rien
+        Post-conditions :
+            Le redimensionnement est appliqué
         """
         if type(self.instance) == FilesContainers:
             try:
-                width = int(self.fi_size_entry.get().split("*")[0])
-                height = int(self.fi_size_entry.get().split("*")[1])
+                width = int(self.size_entry.get().split("*")[0])
+                height = int(self.size_entry.get().split("*")[1])
                 self.instance.confirm_resize((width, height))
             except ValueError:
                 return
         elif type(self.instance) == FolderContainer:
             try:
-                width = int(self.fo_size_entry.get().split("*")[0])
-                height = int(self.fo_size_entry.get().split("*")[1])
+                width = int(self.size_entry.get().split("*")[0])
+                height = int(self.size_entry.get().split("*")[1])
                 start = int(self.fo_start_indexes.get())
                 end = int(self.fo_end_indexes.get())
                 self.instance.apply_resize((width, height), start, end)

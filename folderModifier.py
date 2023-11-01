@@ -29,7 +29,7 @@ class ImagesModifier:
         Post-conditions :
             Les images tournées sont affichées, mais ces changements ne sont pas appliqués
         """
-        image.rotate(angle).show()
+        image.rotate(angle, expand=True).show()
 
     def apply_images_rotation(self, angle, image):
         """
@@ -41,7 +41,7 @@ class ImagesModifier:
         Post-conditions :
             L'image tournée est renvoyée
         """
-        return image.rotate(angle)
+        return image.rotate(angle, expand=True)
 
     def preview_images_filter(self, filtre, image):
         """
