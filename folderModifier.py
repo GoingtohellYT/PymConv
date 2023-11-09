@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageFilter
 from pillow_heif import HeifImagePlugin
 from os import listdir
 from os.path import isfile, join
@@ -53,19 +54,25 @@ class ImagesModifier:
         Post-conditions :
             Les images sont affichées avec le filtre appliqué
         """
-        image.filter(filtre).show()
+        if filtre is ImageFilter:
+            image.filter(filtre).show()
+        elif filtre == "GRAYSCALE":
+            image.convert("L").show()
 
-    def apply_images_filter(selfself, filtre, image):
+    def apply_images_filter(self, filtre, image):
         """
         Fonction qui applique le filtre spécifié aux différentes images
 
         Arguments :
-            filter est une instance de la classe ImageFilter du module PIL
+            filter est une instance de la classe ImageFilter du module PIL ou "GRAYSCALE" en str
             image est une instance de la classe Image du module PIL
         Post-conditions :
             Les images sont renvoyées avec le filtre appliqué
         """
-        return image.filter(filtre)
+        if filtre is ImageFilter:
+            return image.filter(filtre)
+        elif filtre == "GRAYSCALE":
+            return image.convert("L")
 
     def preview_resized_images(self, size, image):
         """

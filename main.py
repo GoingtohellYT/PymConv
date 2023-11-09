@@ -5,6 +5,8 @@ import tkinter
 import tkinter.filedialog
 from tkinter import ttk
 from PIL import ImageFilter
+from os.path import isdir, isfile
+from os import listdir
 
 
 class UI:
@@ -13,9 +15,12 @@ class UI:
 
         # --------------- Partie Définition des constantes ----------------- #
 
-        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF", "PDF"]  # Types dans lesquels on peut convertir les fichiers
-        self.degres = ["0.0", "45.0", "90.0", "135.0", "180.0", "225.0", "270.0", "315.0"]  # Angles de rotation par défaut
-        self.filtres = ["NONE", "BLUR", "CONTOUR", "DETAIL", "EDGE_ENHANCE", "EDGE_ENHANCE_MORE", "EMBOSS", "FIND_EDGES", "SHARPEN", "SMOOTH", "SMOOTH_MORE"]  # Filtres disponibles
+        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF",
+                                "PDF"]  # Types dans lesquels on peut convertir les fichiers
+        self.degres = ["0.0", "45.0", "90.0", "135.0", "180.0", "225.0", "270.0",
+                       "315.0"]  # Angles de rotation par défaut
+        self.filtres = ["NONE", "BLUR", "CONTOUR", "DETAIL", "EDGE_ENHANCE", "EDGE_ENHANCE_MORE", "EMBOSS",
+                        "FIND_EDGES", "SHARPEN", "SMOOTH", "SMOOTH_MORE", "GRAYSCALE"]  # Filtres disponibles
 
         self.background_color = "#B2BABB"
         self.font = ("Arial", 12)
@@ -47,25 +52,29 @@ class UI:
                                             command=self.open_folder)
         self.folder_button.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
 
-        self.start_label = tkinter.Label(self.top_frame, text="Agir sur les images : ", font=self.font, fg='black',  bg=self.background_color)
+        self.start_label = tkinter.Label(self.top_frame, text="Agir sur les images : ", font=self.font, fg='black',
+                                         bg=self.background_color)
         self.start_label.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
         self.fo_start_indexes = ttk.Combobox(self.top_frame, state='readonly')
         self.fo_start_indexes.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.separator_label = tkinter.Label(self.top_frame, text="à", font=self.font, fg="black", bg=self.background_color)
+        self.separator_label = tkinter.Label(self.top_frame, text="à", font=self.font, fg="black",
+                                             bg=self.background_color)
         self.separator_label.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
         self.fo_end_indexes = ttk.Combobox(self.top_frame, state='readonly')
         self.fo_end_indexes.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
-        self.see_images_btn = tkinter.Button(self.bottom_frame, text="Voir la ou les images", font=self.font, bg='white',
+        self.see_images_btn = tkinter.Button(self.bottom_frame, text="Voir la ou les images", font=self.font,
+                                             bg='white',
                                              command=self.see_images)
         self.see_images_btn.pack(side=tkinter.LEFT)
 
         # --------------- Partie Modifications ----------------- #
 
-        self.resize_label = tkinter.Label(self.left_frame, font=self.font, bg=self.background_color, fg='black', text="Changer les dimensions")
+        self.resize_label = tkinter.Label(self.left_frame, font=self.font, bg=self.background_color, fg='black',
+                                          text="Changer les dimensions")
         self.resize_label.pack(padx=self.massive_x_separation)
 
         self.size_entry = tkinter.Entry(self.left_frame, font=self.font, bg='white')
@@ -80,32 +89,39 @@ class UI:
                                            command=self.confirm_crop)
         self.size_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.rotation_label = tkinter.Label(self.left_frame, text="Tourner la ou les images", font=self.font, fg="black", bg=self.background_color)
+        self.rotation_label = tkinter.Label(self.left_frame, text="Tourner la ou les images", font=self.font,
+                                            fg="black", bg=self.background_color)
         self.rotation_label.pack(padx=self.massive_x_separation, pady=self.large_y_separation)
 
         self.rotation_choice = ttk.Combobox(self.left_frame, values=self.degres)
         self.rotation_choice.current(0)
         self.rotation_choice.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.rotation_test = tkinter.Button(self.left_frame, text="Essayer", font=self.font, bg='white', command=self.try_rotation)
+        self.rotation_test = tkinter.Button(self.left_frame, text="Essayer", font=self.font, bg='white',
+                                            command=self.try_rotation)
         self.rotation_test.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.rotation_confirm = tkinter.Button(self.left_frame, text="Valider", font=self.font, bg='white', command=self.confirm_rotation)
+        self.rotation_confirm = tkinter.Button(self.left_frame, text="Valider", font=self.font, bg='white',
+                                               command=self.confirm_rotation)
         self.rotation_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.filter_label = tkinter.Label(self.right_frame, text="Appliquer un filtre", font=self.font, bg=self.background_color, fg="black")
+        self.filter_label = tkinter.Label(self.right_frame, text="Appliquer un filtre", font=self.font,
+                                          bg=self.background_color, fg="black")
         self.filter_label.pack(padx=self.massive_x_separation)
 
         self.filter_choice = ttk.Combobox(self.right_frame, values=self.filtres, state='readonly')
         self.filter_choice.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.filter_try = tkinter.Button(self.right_frame, text="Essayer", font=self.font, bg='white', command=self.try_filter)
+        self.filter_try = tkinter.Button(self.right_frame, text="Essayer", font=self.font, bg='white',
+                                         command=self.try_filter)
         self.filter_try.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.filter_confirm = tkinter.Button(self.right_frame, text="Valider", font=self.font, bg="white", command=self.confirm_filter)
+        self.filter_confirm = tkinter.Button(self.right_frame, text="Valider", font=self.font, bg="white",
+                                             command=self.confirm_filter)
         self.filter_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
-        
-        self.type_label = tkinter.Label(self.right_frame, text="Choisir le format de destination", font=self.font, bg=self.background_color, fg="black")
+
+        self.type_label = tkinter.Label(self.right_frame, text="Choisir le format de destination", font=self.font,
+                                        bg=self.background_color, fg="black")
         self.type_label.pack(padx=self.massive_x_separation, pady=self.large_y_separation)
 
         self.container_choice = ttk.Combobox(self.right_frame, values=self.types_supportes,
@@ -138,7 +154,10 @@ class UI:
             Affiche une interface pour sélectionner l'élément voulu et défini le chemin sur celui l'élément voulu
         """
 
-        path = Path(tkinter.filedialog.askdirectory(mustexist=True))
+        path = tkinter.filedialog.askdirectory(mustexist=True)
+        assert isdir(path), "Le dossier n'existe pas"
+        path = Path(path)
+        assert len(listdir(path)) > 0, "Le dossier est vide"
         self.instance = FolderContainer(path)
         images_indexes = self.instance.get_indexes()
 
@@ -161,6 +180,7 @@ class UI:
         """
 
         path = tkinter.filedialog.askopenfilename()
+        assert isfile(path), "Aucun chemin sélectionné"
         self.instance = FilesContainers(path)
 
     def see_images(self):
@@ -274,6 +294,8 @@ class UI:
                 self.instance.try_filter(ImageFilter.SMOOTH)
             elif filtre == "SMOOTH_MORE":
                 self.instance.try_filter(ImageFilter.SMOOTH_MORE)
+            elif filtre == "GRAYSCALE":
+                self.instance.try_filter("GRAYSCALE")
         elif type(self.instance) == FolderContainer:
             filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
@@ -298,6 +320,8 @@ class UI:
                 self.instance.try_filter(ImageFilter.SMOOTH, start, end)
             elif filtre == "SMOOTH_MORE":
                 self.instance.try_filter(ImageFilter.SMOOTH_MORE, start, end)
+            elif filtre == 'GRAYSCALE':
+                self.instance.try_filter("GRAYSCALE", start, end)
 
     def confirm_filter(self):
         """
@@ -332,6 +356,8 @@ class UI:
                 self.instance.confirm_filter(ImageFilter.SMOOTH)
             elif filtre == "SMOOTH_MORE":
                 self.instance.confirm_filter(ImageFilter.SMOOTH_MORE)
+            elif filtre == "GRAYSCALE":
+                self.instance.confirm_filter("GRAYSCALE")
         elif type(self.instance) == FolderContainer:
             filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
@@ -356,6 +382,8 @@ class UI:
                 self.instance.apply_filter(ImageFilter.SMOOTH, start, end)
             elif filtre == "SMOOTH_MORE":
                 self.instance.apply_filter(ImageFilter.SMOOTH_MORE, start, end)
+            elif filtre == "GRAYSCALE":
+                self.instance.apply_filter("GRAYSCALE", start, end)
 
     def try_crop(self):
         """

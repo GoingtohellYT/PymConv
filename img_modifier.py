@@ -1,4 +1,5 @@
 from PIL import Image
+from PIL import ImageFilter
 from pillow_heif import HeifImagePlugin
 
 
@@ -25,13 +26,19 @@ class ImgModifier:
 
     def preview_filter_img(self, filtre):
         """Methode qui montre le filtre sur l'image que l'utilisateur veut mettre.
-        Prend en paramètre une instance du filtre (ex: ImageFilter.BLUR)"""
-        self.image.filter(filtre).show()
+        Prend en paramètre une instance du filtre (ex: ImageFilter.BLUR) ou 'GRAYSCALE' en str"""
+        if filtre is ImageFilter:
+            self.image.filter(filtre).show()
+        elif filtre == "GRAYSCALE":
+            self.image.convert("L").show()
 
     def filter_img(self, filtre):
         """Methode qui sauvegarde le filtre sur l'image que l'utilisateur veut mettre.
-        Prend en paramètre une instance du filtre (ex: ImageFilter.BLUR)"""
-        return self.image.filter(filtre)
+        Prend en paramètre une instance du filtre (ex: ImageFilter.BLUR) ou 'GRAYSCALE' en str"""
+        if filtre is ImageFilter:
+            return self.image.filter(filtre)
+        elif filtre == "GRAYSCALE":
+            return self.image.convert("L")
 
     def preview_resize_img(self, size):
         """Fonction qui montre la modification de taille.
