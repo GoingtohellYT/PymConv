@@ -31,6 +31,7 @@ class UI:
         self.window.title("PymConv")
         self.window.geometry("1080x500")
         self.window.config(background="#B2BABB")
+        self.window.resizable(False, False)
 
         # On définit des "boîtes" qui vont contenir les éléments du GUI
         self.right_frame = tkinter.Frame(self.window, background=self.background_color)
@@ -79,7 +80,7 @@ class UI:
                                            command=self.confirm_crop)
         self.size_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.rotation_label = tkinter.Label(self.left_frame, text="Tourner l'image", font=self.font, fg="black", bg=self.background_color)
+        self.rotation_label = tkinter.Label(self.left_frame, text="Tourner la ou les images", font=self.font, fg="black", bg=self.background_color)
         self.rotation_label.pack(padx=self.massive_x_separation, pady=self.large_y_separation)
 
         self.rotation_choice = ttk.Combobox(self.left_frame, values=self.degres)
@@ -103,13 +104,16 @@ class UI:
 
         self.filter_confirm = tkinter.Button(self.right_frame, text="Valider", font=self.font, bg="white", command=self.confirm_filter)
         self.filter_confirm.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
+        
+        self.type_label = tkinter.Label(self.right_frame, text="Choisir le format de destination", font=self.font, bg=self.background_color, fg="black")
+        self.type_label.pack(padx=self.massive_x_separation, pady=self.large_y_separation)
 
         self.container_choice = ttk.Combobox(self.right_frame, values=self.types_supportes,
                                              state='readonly')  # On crée une combobox avec les conteneurs disponibles
         self.container_choice.current(0)  # On définit l'élément par défaut sur le premier élément de la liste
-        self.container_choice.pack(pady=self.large_y_separation, padx=self.massive_x_separation)
+        self.container_choice.pack(pady=self.minimal_y_separation, padx=self.massive_x_separation)
 
-        self.container_convert = tkinter.Button(self.bottom_frame, text="Convertir les images du dossier",
+        self.container_convert = tkinter.Button(self.bottom_frame, text="Convertir la ou les images",
                                                 font=self.font, bg='white', command=self.convert_images)
         self.container_convert.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
 
