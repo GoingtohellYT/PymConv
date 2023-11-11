@@ -7,6 +7,7 @@ from tkinter import ttk
 from PIL import ImageFilter
 from os.path import isdir, isfile
 from os import listdir
+from gc import get_objects
 
 
 class UI:
@@ -132,6 +133,17 @@ class UI:
         self.container_convert = tkinter.Button(self.bottom_frame, text="Convertir la ou les images",
                                                 font=self.font, bg='white', command=self.convert_images)
         self.container_convert.pack(side=tkinter.LEFT, padx=self.usual_x_separation)
+
+        # -------------- Partie Affichage des ensembles ----------------- #
+        self.menu_bar = tkinter.Menu(self.window)  # création du menu de navigation
+        self.file_menu = tkinter.Menu(self.menu_bar, tearoff=0)  # On définit un premier champ
+
+        self.file_menu.add_command(label="Nouvelle instance", command=self.create_new_instance)
+        self.file_menu.add_command(label="Fermer la fenêtre", command=self.destroy_instance)
+        self.file_menu.add_command(label="Fermer toutes les fenêtres", command=self.destroy_all_instances)
+        self.menu_bar.add_cascade(label="Fichier", menu=self.file_menu)  # On nomme le premier champ
+
+        self.window.config(menu=self.menu_bar)  # On ajoute le menu de navigation à la fenêtre
 
         # -------------- Partie Affichage des ensembles ----------------- #
         # On affiche les frames
@@ -440,6 +452,51 @@ class UI:
                 self.instance.apply_resize((width, height), start, end)
             except ValueError:
                 return
+
+    @staticmethod
+    def create_new_instance():
+        """
+        Fonction qui créé une nouvelle instance de la classe UI et ouvre une nouvelle fenêtre.
+        Cela permet de travailler sur plusieurs dossiers ou images individuelles en même temps
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Aucune
+        Post-conditions :
+            Une nouvelle fenêtre est ouverte et permet de travailler sur d'autres images
+        """
+        UI()
+
+    def destroy_instance(self):
+        """
+        Fonction qui ferme la fenêtre actuelle. Le programme s'arrête si aucune autre fenêtre était ouverte
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Une instance de la classe UI existe
+        Post-conditions :
+            La fenêtre se ferme
+        """
+        self.window.destroy()
+
+    @staticmethod
+    def destroy_all_instances():
+        """
+        Fonction qui ferme toutes les fenêtres qui sont des instances de la classe UI
+        Le programme est arrêté lors de l'exécution de cette fonction
+
+        Retourne :
+            Rien
+        Pré-conditions :
+            Aucune
+        Post-conditions :
+            Toutes les fenêtres qui sont des instances de la classe UI sont fermées
+        """
+        for ob in get_objects():
+            if isinstance(ob, UI):
+                ob.destroy_instance()
 
 
 ui = UI()
