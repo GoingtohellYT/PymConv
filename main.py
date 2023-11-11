@@ -6,18 +6,18 @@ import tkinter.filedialog
 from tkinter import ttk
 from PIL import ImageFilter
 from os.path import isdir, isfile
-from os import listdir
+from os import listdir, system
 from gc import get_objects
 
 
 class UI:
     def __init__(self):
         self.instance = None
+        self.active = True
 
         # --------------- Partie Définition des constantes ----------------- #
 
-        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF",
-                                "PDF"]  # Types dans lesquels on peut convertir les fichiers
+        self.types_supportes = ['JPEG', 'PNG', 'ICO', "GIF", "WEBP", "TIFF", "PDF"]  # Types dans lesquels on peut convertir les fichiers
         self.degres = ["0.0", "45.0", "90.0", "135.0", "180.0", "225.0", "270.0",
                        "315.0"]  # Angles de rotation par défaut
         self.filtres = ["NONE", "BLUR", "CONTOUR", "DETAIL", "EDGE_ENHANCE", "EDGE_ENHANCE_MORE", "EMBOSS",
@@ -68,8 +68,7 @@ class UI:
         self.fo_end_indexes.pack(side=tkinter.LEFT, padx=self.minimal_x_separation)
 
         self.see_images_btn = tkinter.Button(self.bottom_frame, text="Voir la ou les images", font=self.font,
-                                             bg='white',
-                                             command=self.see_images)
+                                             bg='white', command=self.see_images)
         self.see_images_btn.pack(side=tkinter.LEFT)
 
         # --------------- Partie Modifications ----------------- #
@@ -137,11 +136,16 @@ class UI:
         # -------------- Partie Affichage des ensembles ----------------- #
         self.menu_bar = tkinter.Menu(self.window)  # création du menu de navigation
         self.file_menu = tkinter.Menu(self.menu_bar, tearoff=0)  # On définit un premier champ
+        self.help_menu = tkinter.Menu(self.menu_bar, tearoff=0)
 
         self.file_menu.add_command(label="Nouvelle instance", command=self.create_new_instance)
         self.file_menu.add_command(label="Fermer la fenêtre", command=self.destroy_instance)
         self.file_menu.add_command(label="Fermer toutes les fenêtres", command=self.destroy_all_instances)
+        self.help_menu.add_command(label="Voir la documentation", command=self.open_doc)
+        self.help_menu.add_command(label="Déclarer un bug", command=self.bug_report)
+
         self.menu_bar.add_cascade(label="Fichier", menu=self.file_menu)  # On nomme le premier champ
+        self.menu_bar.add_cascade(label="Aide", menu=self.help_menu)
 
         self.window.config(menu=self.menu_bar)  # On ajoute le menu de navigation à la fenêtre
 
@@ -480,6 +484,7 @@ class UI:
             La fenêtre se ferme
         """
         self.window.destroy()
+        self.active = False
 
     @staticmethod
     def destroy_all_instances():
@@ -495,8 +500,36 @@ class UI:
             Toutes les fenêtres qui sont des instances de la classe UI sont fermées
         """
         for ob in get_objects():
-            if isinstance(ob, UI):
+            if isinstance(ob, UI) and ob.active:
                 ob.destroy_instance()
+
+    @staticmethod
+    def open_doc():
+        """
+        Fonction qui ouvre le navigateur et affiche la page GitHub avec le README
+
+        Retourne :
+            Rien
+        Pré-condition :
+            Aucune
+        Post-conditions :
+            Une fenêtre web est ouverte avec la page GitHub
+        """
+        system("start \"\" https://github.com/GoingtohellYT/PymConv")
+
+    @staticmethod
+    def bug_report():
+        """
+        Fonction qui ouvre le navigateur et affiche la page des Issues de GitHub
+
+        Retourne :
+            Rien
+        Pré-condition :
+            Aucune
+        Post-condition :
+            Une fenêtre web est ouverte avec la page des Issues GitHub
+        """
+        system("start \"\" https://github.com/GoingtohellYT/PymConv/issues")
 
 
 ui = UI()
