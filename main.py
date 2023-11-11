@@ -206,11 +206,11 @@ class UI:
         Post-conditions :
             L'image/Les images sont affichées
         """
-        if type(self.instance) == FolderContainer:
+        if type(self.instance) is FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             self.instance.see_images(start, end)
-        elif type(self.instance) == FilesContainers:
+        elif type(self.instance) is FilesContainers:
             self.instance.show_image()
 
     def convert_images(self):
@@ -224,12 +224,12 @@ class UI:
         Post-conditions :
             L'image/Les images sont enregistrées sur la machine
         """
-        if type(self.instance) == FolderContainer:
+        if type(self.instance) is FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             dest_format = str(self.container_choice.get())
             self.instance.to_format(dest_format, start, end)
-        elif type(self.instance) == FilesContainers:
+        elif type(self.instance) is FilesContainers:
             dest_format = str(self.container_choice.get())
             self.instance.convert_img(dest_format)
 
@@ -244,10 +244,10 @@ class UI:
         Post-conditions :
             L'image/Les images tournées sont affichées
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             angle = float(self.rotation_choice.get())
-            self.instance.try_rotate_img(angle)
-        elif type(self.instance) == FolderContainer:
+            self.instance.preview_image_rotation(angle, self.instance.image)
+        elif type(self.instance) is FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             angle = float(self.rotation_choice.get())
@@ -264,10 +264,10 @@ class UI:
         Post-conditions :
             La rotation est appliquée
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             angle = float(self.rotation_choice.get())
             self.instance.confirm_rotation(angle)
-        elif type(self.instance) == FolderContainer:
+        elif type(self.instance) is FolderContainer:
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
             angle = float(self.rotation_choice.get())
@@ -284,31 +284,31 @@ class UI:
         Post-conditions :
             L'image/Les images sont affichées avec le filtre
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             filtre = str(self.filter_choice.get())
             if filtre == "BLUR":
-                self.instance.try_filter(ImageFilter.BLUR)
+                self.instance.preview_image_filter(ImageFilter.BLUR, self.instance.image)
             elif filtre == "CONTOUR":
-                self.instance.try_filter(ImageFilter.CONTOUR)
+                self.instance.preview_image_filter(ImageFilter.CONTOUR, self.instance.image)
             elif filtre == "DETAIL":
-                self.instance.try_filter(ImageFilter.DETAIL)
+                self.instance.preview_image_filter(ImageFilter.DETAIL, self.instance.image)
             elif filtre == "EDGE_ENHANCE":
-                self.instance.try_filter(ImageFilter.EDGE_ENHANCE)
+                self.instance.preview_image_filter(ImageFilter.EDGE_ENHANCE, self.instance.image)
             elif filtre == "EDGE_ENHANCE_MORE":
-                self.instance.try_filter(ImageFilter.EDGE_ENHANCE_MORE)
+                self.instance.preview_image_filter(ImageFilter.EDGE_ENHANCE_MORE, self.instance.image)
             elif filtre == "EMBOSS":
-                self.instance.try_filter(ImageFilter.EMBOSS)
+                self.instance.preview_image_filter(ImageFilter.EMBOSS, self.instance.image)
             elif filtre == "FIND_EDGES":
-                self.instance.try_filter(ImageFilter.FIND_EDGES)
+                self.instance.preview_image_filter(ImageFilter.FIND_EDGES, self.instance.image)
             elif filtre == "SHARPEN":
-                self.instance.try_filter(ImageFilter.SHARPEN)
+                self.instance.preview_image_filter(ImageFilter.SHARPEN, self.instance.image)
             elif filtre == "SMOOTH":
-                self.instance.try_filter(ImageFilter.SMOOTH)
+                self.instance.preview_image_filter(ImageFilter.SMOOTH, self.instance.image)
             elif filtre == "SMOOTH_MORE":
-                self.instance.try_filter(ImageFilter.SMOOTH_MORE)
+                self.instance.preview_image_filter(ImageFilter.SMOOTH_MORE, self.instance.image)
             elif filtre == "GRAYSCALE":
-                self.instance.try_filter("GRAYSCALE")
-        elif type(self.instance) == FolderContainer:
+                self.instance.preview_image_filter("GRAYSCALE", self.instance.image)
+        elif type(self.instance) is FolderContainer:
             filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
@@ -346,7 +346,7 @@ class UI:
         Post-conditions :
             Le filtre est appliqué
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             filtre = str(self.filter_choice.get())
             if filtre == "BLUR":
                 self.instance.confirm_filter(ImageFilter.BLUR)
@@ -370,7 +370,7 @@ class UI:
                 self.instance.confirm_filter(ImageFilter.SMOOTH_MORE)
             elif filtre == "GRAYSCALE":
                 self.instance.confirm_filter("GRAYSCALE")
-        elif type(self.instance) == FolderContainer:
+        elif type(self.instance) is FolderContainer:
             filtre = str(self.filter_choice.get())
             start = int(self.fo_start_indexes.get())
             end = int(self.fo_end_indexes.get())
@@ -408,14 +408,14 @@ class UI:
         Post-conditions :
             L'image/Les images sont affichées aux nouvelles dimensions
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             try:
                 width = int(self.size_entry.get().split("*")[0])
                 height = int(self.size_entry.get().split("*")[1])
-                self.instance.try_resize((width, height))
+                self.instance.preview_resized_image((width, height), self.instance.image)
             except ValueError:
                 return
-        elif type(self.instance) == FolderContainer:
+        elif type(self.instance) is FolderContainer:
             try:
                 width = int(self.size_entry.get().split("*")[0])
                 height = int(self.size_entry.get().split("*")[1])
@@ -436,14 +436,14 @@ class UI:
         Post-conditions :
             Le redimensionnement est appliqué
         """
-        if type(self.instance) == FilesContainers:
+        if type(self.instance) is FilesContainers:
             try:
                 width = int(self.size_entry.get().split("*")[0])
                 height = int(self.size_entry.get().split("*")[1])
                 self.instance.confirm_resize((width, height))
             except ValueError:
                 return
-        elif type(self.instance) == FolderContainer:
+        elif type(self.instance) is FolderContainer:
             try:
                 width = int(self.size_entry.get().split("*")[0])
                 height = int(self.size_entry.get().split("*")[1])
