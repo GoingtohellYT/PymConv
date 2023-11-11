@@ -2,7 +2,7 @@
 
 Un programme python simple qui permet de convertir des images et des dossiers d'images ainsi que de faire des retouches rapides.
 
-## Pourquoi avoir créé Pymconv ?
+## Pourquoi avoir créé PymConv ?
 
 Nous sommes partis d'un constat simple : lorsque l'on souhaite convertir une image, on se dirige souvent vers les sites de conversion en ligne. Et en local ? Malheureusement, peu d'options légères accomplissent cette tâche. La plupart sont des logiciels de retouche d'images complets et ne proposent même pas tous les formats que PymConv propose. 
 Photoshop par exemple ne peut qu'enregistrer des images aux formats *jpg, png, gif*. Vous pouvez dire adieu au *ico* pour les icones Windows ou au *webp* qui se démocratise sur le web.
