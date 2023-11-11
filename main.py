@@ -36,6 +36,7 @@ class UI:
         self.window = tkinter.Tk()  # On crée une fenêtre graphique avec tkinter
         self.window.title("PymConv")
         self.window.geometry("1080x500")
+        self.window.iconbitmap("images/logo.ico")
         self.window.config(background="#B2BABB")
         self.window.resizable(False, False)
 
