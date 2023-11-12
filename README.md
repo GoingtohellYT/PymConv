@@ -22,7 +22,7 @@ La transparence est supportée pour les formats *png, ico, gif, webp, tiff*. Si 
 PymConv offre plusieurs types de retouches rapides :
 - Rotation (en sens anti-horaire)
 - Redimmensionnement (change la hauteur et la largeur de l'image sans rogner les bords)
-- Filtres (Tous les filtres sont issus du module pillow, à l'exception de la nuance de gris qui est une convertion dans le mode 'L' --> [Voir les modes](https://pillow.readthedocs.io/en/stable/handbook/concepts.html#concept-modes) & [Voir les filtres](https://pillow.readthedocs.io/en/stable/reference/ImageFilter.html pour plus d'information)
+- Filtres (Tous les filtres sont issus du module pillow, à l'exception de la nuance de gris qui est une convertion dans le mode 'L' --> [Voir les modes](https://pillow.readthedocs.io/en/stable/handbook/concepts.html#concept-modes) & [Voir les filtres](https://pillow.readthedocs.io/en/stable/reference/ImageFilter.html) pour plus d'information
 
 ## Modules utilisés
 
